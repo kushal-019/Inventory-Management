@@ -47,8 +47,14 @@ export const recievedOrdersController = async (req, res, next) => {
 
 export const orderplacedController = async (req, res, next) => {
   try {
-    const { customer, Supplier, items } = req.body;
-    const order = await Orders.create({ customer, Supplier, items });
+    const { customer, Supplier, items, totalAmount, totalCost } = req.body;
+    const order = await Orders.create({
+      customer,
+      Supplier,
+      items,
+      totalAmount,
+      totalCost,
+    });
 
     res
       .status(201)
