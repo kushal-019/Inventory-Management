@@ -8,6 +8,6 @@ import userAuth from "../Middleware/authMiddlewaare.js";
 const SupplierRouter = express.Router();
 
 SupplierRouter.get("/", userAuth, DisplaySupplierController);
-SupplierRouter.get("/showinventory:id", userAuth, ShowinventoryController);
+SupplierRouter.get("/showinventory/:id", userAuth, ShowinventoryController);
 
 export default SupplierRouter;

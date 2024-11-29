@@ -35,6 +35,12 @@ const OrderSchema = new Schema({
         required: true,
         min: 0,
       },
+      CostPerUnit: {
+        // cost to supplier
+        type: Number,
+        required: true,
+        min: 0,
+      },
     },
   ],
   totalCost: {
