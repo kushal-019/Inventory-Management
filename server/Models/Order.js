@@ -8,7 +8,7 @@ const OrderSchema = new Schema({
     ref: "User",
     required: true,
   },
-  SupplierId: {
+  supplierId: {
     type: Schema.Types.ObjectId,
     ref: "User",
     required: true,
@@ -16,27 +16,16 @@ const OrderSchema = new Schema({
   status: {
     type: String,
     enum: ["Pending", "Rejected", "Confirmed"],
-    default: "Pending", // Ensure consistent capitalization
+    default: "Pending",
   },
   OrderItems: [
     {
-      itemName: {
-        type: String,
+      product: {
+        type: Schema.Types.ObjectId,
+        ref: "Product",
         required: true,
       },
       quantity: {
-        type: Number,
-        required: true,
-        min: 0,
-      },
-      pricePerUnit: {
-        // Price to buyer
-        type: Number,
-        required: true,
-        min: 0,
-      },
-      CostPerUnit: {
-        // cost to supplier
         type: Number,
         required: true,
         min: 0,

@@ -4,38 +4,20 @@ const { Schema, model } = mongoose;
 
 const inventorySchema = new Schema({
   userId: {
-    type: Schema.Types.ObjectId,
+    type: String,
     ref: "User",
     required: true,
   },
   stock: [
     {
-      itemName: {
-        type: String,
-        required: true,
+      product : {
+        type : String,
+        ref : "Product",
       },
       quantity: {
         type: Number,
         required: true,
         min: 0,
-      },
-      costPerUnit: {
-        // Cost to the owner
-        type: Number,
-        required: true,
-        min: 0,
-      },
-      pricePerUnit: {
-        // Price to the buyer
-        type: Number,
-        required: true,
-        min: 0,
-        validate: {
-          validator: function (value) {
-            return value >= this.costPerUnit; // Ensure price is not less than cost
-          },
-          message: "pricePerUnit must be greater than or equal to costPerUnit.",
-        },
       },
     },
   ],
