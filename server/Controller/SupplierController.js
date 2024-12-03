@@ -40,15 +40,16 @@ export const ShowinventoryController = async (req, res, next) => {
 
 export const UpdateInventoryController = async (req, res, next) => {
   try {
-    const { inventoryId, productId, itemName, quantity, pricePerUnit, CostPerUnit } = req.body;
+    const { id } = req.params;
+    const { productId, itemName, quantity, pricePerUnit, costPerUnit } = req.body;
 
     // Ensure the required fields are provided
-    if (!inventoryId || (!productId && (quantity === undefined && pricePerUnit === undefined && CostPerUnit === undefined))) {
+    if (!id || (productId && (quantity === undefined && pricePerUnit === undefined && costPerUnit === undefined))) {
       return res.status(400).json({ success: false, message: "Missing required fields" });
     }
 
     // Find the inventory based on the inventoryId
-    const supplierInventory = await Inventory.findById(inventoryId);
+    const supplierInventory = await Inventory.findById(id);
     if (!supplierInventory) {
       return res.status(404).json({ success: false, message: "Inventory not found" });
     }
@@ -62,14 +63,14 @@ export const UpdateInventoryController = async (req, res, next) => {
       if (product) {
         // Update the quantity if it's provided
         if (quantity !== undefined) {
-          product.quantity += quantity;
+          product.quantity = quantity;
         }
 
         // If pricePerUnit or CostPerUnit is provided, update them in the Product collection
         if (pricePerUnit !== undefined || CostPerUnit !== undefined) {
           await Product.findByIdAndUpdate(
             productId,
-            { pricePerUnit, CostPerUnit },
+            { pricePerUnit, costPerUnit },
             { new: true } // Get the updated product after saving
           );
         }
@@ -81,7 +82,7 @@ export const UpdateInventoryController = async (req, res, next) => {
       const newProduct = new Product({
         itemName,
         pricePerUnit,
-        CostPerUnit,
+        costPerUnit,
       });
 
       await newProduct.save(); // Save the new product to the Product collection

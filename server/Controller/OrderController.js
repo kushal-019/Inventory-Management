@@ -48,6 +48,7 @@ export const recievedOrdersController = async (req, res, next) => {
 export const orderplacedController = async (req, res, next) => {
   try {
     const { customerId, SupplierId, items, totalAmount, totalCost } = req.body;
+    console.log(req.body)
 
     // Validate the input data
     if (!customerId || !SupplierId || !items || items.length === 0) {

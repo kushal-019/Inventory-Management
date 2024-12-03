@@ -10,6 +10,6 @@ const SupplierRouter = express.Router();
 
 SupplierRouter.get("/", userAuth, DisplaySupplierController);
 SupplierRouter.get("/showinventory/:id", userAuth, ShowinventoryController);
-SupplierRouter.get("/updateinventory/:id", userAuth, UpdateInventoryController);
+SupplierRouter.patch("/updateinventory/:id", userAuth, UpdateInventoryController);
 
 export default SupplierRouter;
