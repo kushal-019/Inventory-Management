@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-const OrderSchema = new Schema({
+const orderSchema = new Schema({
   userId: {
     type: Schema.Types.ObjectId,
     ref: "User",
@@ -18,7 +18,7 @@ const OrderSchema = new Schema({
     enum: ["Pending", "Rejected", "Confirmed"],
     default: "Pending",
   },
-  OrderItems: [
+  orderItems: [
     {
       product: {
         type: Schema.Types.ObjectId,
@@ -52,11 +52,11 @@ const OrderSchema = new Schema({
   },
 });
 
-OrderSchema.pre("save", function (next) {
+orderSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
-const Orders = model("Orders", OrderSchema);
+const Orders = model("Orders", orderSchema);
 
 export default Orders;

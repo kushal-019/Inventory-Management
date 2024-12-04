@@ -1,15 +1,11 @@
 import express from "express";
-import {
-  DisplaySupplierController,
-  ShowinventoryController,
-  UpdateInventoryController,
-} from "../Controller/SupplierController.js";
-import userAuth from "../Middleware/authMiddlewaare.js";
+import { displaySupplierController, showInventoryController, updateInventoryController } from "../Controller/SupplierController.js";
+import userAuth from "../Middleware/authMiddleware.js";  
 
-const SupplierRouter = express.Router();
+const supplierRouter = express.Router();
 
-SupplierRouter.get("/", userAuth, DisplaySupplierController);
-SupplierRouter.get("/showinventory/:id", userAuth, ShowinventoryController);
-SupplierRouter.patch("/updateinventory/:id", userAuth, UpdateInventoryController);
+supplierRouter.get("/", userAuth, displaySupplierController);
+supplierRouter.get("/showinventory/:id", userAuth, showInventoryController);
+supplierRouter.patch("/updateinventory/:id", userAuth, updateInventoryController);
 
-export default SupplierRouter;
+export default supplierRouter;

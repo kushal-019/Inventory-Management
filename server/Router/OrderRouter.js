@@ -1,21 +1,21 @@
 import express from "express";
 import {
-  OrderHistoryController,
-  recievedOrdersController,
-  orderplacedController,
+  orderHistoryController,
+  orderPlacedController,
+  receivedOrdersController,
   updateOrderStatusController,
-} from "../Controller/OrderController.js";
-import userAuth from "../Middleware/authMiddlewaare.js";
+} from "../Controller/OrderController.js"; 
+import userAuth from "../Middleware/authMiddleware.js";
 
-const OrderRouter = express.Router();
+const orderRouter = express.Router();
 
 // Sent as Consumer
-OrderRouter.get("/orderhistory", userAuth, OrderHistoryController);
-// Recieved as supllier
-OrderRouter.get("/orderrecieved", userAuth, recievedOrdersController);
+orderRouter.get("/orderhistory", userAuth, orderHistoryController);
+// Received as supplier
+orderRouter.get("/orderrecieved", userAuth, receivedOrdersController);
 // Action taken on order
-OrderRouter.patch("/updateOrderStatus", userAuth, updateOrderStatusController);
+orderRouter.patch("/updateOrderStatus", userAuth, updateOrderStatusController);
 // New Order Route
-OrderRouter.post("/orderplaced", userAuth, orderplacedController);
+orderRouter.post("/orderplaced", userAuth, orderPlacedController);
 
-export default OrderRouter;
+export default orderRouter;

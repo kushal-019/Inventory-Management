@@ -2,21 +2,27 @@ import userSchema from "../Models/User.js";
 
 export const loginController = async (req, res, next) => {
   const { email, password } = req.body;
-  if (!email || !password) next("please provide all fields");
+
+  if (!email || !password) {
+    return next(new Error("Please provide all fields"));
+  }
 
   const user = await userSchema.findOne({ email }).select("+password");
-  if (!user) next("Invalid username or password");
-  
+  if (!user) {
+    return next(new Error("Invalid username or password"));
+  }
+
   const matched = await user.comparePassword(password);
-  
-  if (!matched) next("Invalid username or password");
-  console.log(matched)
+  if (!matched) {
+    return next(new Error("Invalid username or password"));
+  }
+
   user.password = undefined;
   const token = user.createJWT();
 
   res.status(200).json({
     success: true,
-    message: "Login SuccessFull",
+    message: "Login successful",
     user,
     token,
   });
@@ -25,16 +31,15 @@ export const loginController = async (req, res, next) => {
 export const registerController = async (req, res, next) => {
   try {
     const { name, email, password, role } = req.body;
-    if (!name) next("please provide name");
 
-    if (!email) next("please provide email");
-
-    if (!password) next("please provide password");
-
-    if (!role) next("please define your role");
+    if (!name) return next(new Error("Please provide name"));
+    if (!email) return next(new Error("Please provide email"));
+    if (!password) return next(new Error("Please provide password"));
+    if (!role) return next(new Error("Please define your role"));
 
     const existingUser = await userSchema.findOne({ email });
-    if (existingUser) next("User already exists");
+    if (existingUser) return next(new Error("User already exists"));
+
     const user = await userSchema.create({ name, email, password, role });
 
     const token = user.createJWT();
@@ -44,7 +49,7 @@ export const registerController = async (req, res, next) => {
       message: "User created successfully",
       user: {
         name: user.name,
-        lastname: user.lastname,
+        lastName: user.lastname, 
         email: user.email,
         location: user.location,
         role: user.role,
@@ -55,4 +60,3 @@ export const registerController = async (req, res, next) => {
     next(error);
   }
 };
-

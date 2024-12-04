@@ -3,18 +3,18 @@ import Orders from "../Models/Order.js";
 import Inventory from "../Models/Inventory.js";
 
 // Order you have sent
-export const OrderHistoryController = async (req, res, next) => {
+export const orderHistoryController = async (req, res, next) => {
   try {
     const userId = req.user.userId;
 
     const placedOrders = await Orders.find({ userId }).populate({
       path: "supplierId",
-      select: "name lastname",
+      select: "name lastName",
     });
 
     const formattedOrders = placedOrders.map((order) => ({
       ...order.toObject(),
-      supplierName: `${order.supplierId.name} ${order.supplierId.lastname}`,
+      supplierName: `${order.supplierId.name} ${order.supplierId.lastName}`,
     }));
 
     res.status(200).json({ placedOrders: formattedOrders });
@@ -22,19 +22,20 @@ export const OrderHistoryController = async (req, res, next) => {
     next(error);
   }
 };
-// Order you recieved
-export const recievedOrdersController = async (req, res, next) => {
+
+// Order you received
+export const receivedOrdersController = async (req, res, next) => {
   try {
     const userId = req.user.userId;
 
     const receivedOrders = await Orders.find({ supplierId: userId }).populate({
       path: "userId",
-      select: "name lastname",
+      select: "name lastName",
     });
 
     const formattedOrders = receivedOrders.map((order) => ({
       ...order.toObject(),
-      customerName: `${order.userId.name} ${order.userId.lastname}`,
+      customerName: `${order.userId.name} ${order.userId.lastName}`,
     }));
 
     res.status(200).json({ receivedOrders: formattedOrders });
@@ -43,23 +44,21 @@ export const recievedOrdersController = async (req, res, next) => {
   }
 };
 
-
 // Order you just trying to place
-export const orderplacedController = async (req, res, next) => {
+export const orderPlacedController = async (req, res, next) => {
   try {
-    const { customerId, SupplierId, items, totalAmount, totalCost } = req.body;
-    console.log(req.body)
+    const { customerId, supplierId, items, totalAmount, totalCost } = req.body;
 
     // Validate the input data
-    if (!customerId || !SupplierId || !items || items.length === 0) {
+    if (!customerId || !supplierId || !items || items.length === 0) {
       return res.status(400).send({ success: false, message: "Invalid data" });
     }
 
     // Create the order with default status 'Pending'
     const order = await Orders.create({
       userId: customerId,
-      supplierId: SupplierId,
-      OrderItems: items,
+      supplierId: supplierId,
+      orderItems: items,
       totalAmount,
       totalCost,
     });
@@ -76,7 +75,7 @@ export const orderplacedController = async (req, res, next) => {
 
 const updateInventoryAfterOrder = async (order) => {
   try {
-    const { supplierId, OrderItems, userId } = order;
+    const { supplierId, orderItems, userId } = order;
 
     const supplierInventory = await Inventory.findOne({ userId: supplierId });
     const customer = await userSchema.findById(userId);
@@ -89,7 +88,7 @@ const updateInventoryAfterOrder = async (order) => {
       throw new Error("Supplier inventory not found");
     }
 
-    for (let item of OrderItems) {
+    for (let item of orderItems) {
       const inventoryItem = supplierInventory.stock.find(
         (stockItem) => stockItem.product.toString() === item.product.toString()
       );
@@ -111,21 +110,27 @@ const updateInventoryAfterOrder = async (order) => {
 
     // If customer is a retailer, update their inventory
     if (customer.role === "retailer") {
-      const customerInventory = await Inventory.findOne({ userId: customer._id });
+      const customerInventory = await Inventory.findOne({
+        userId: customer._id,
+      });
 
       if (!customerInventory) {
         throw new Error("Retailer inventory not found");
       }
 
-      for (let item of OrderItems) {
+      for (let item of orderItems) {
         const customerItem = customerInventory.stock.find(
-          (stockItem) => stockItem.product.toString() === item.product.toString()
+          (stockItem) =>
+            stockItem.product.toString() === item.product.toString()
         );
 
         if (customerItem) {
           customerItem.quantity += item.quantity;
         } else {
-          customerInventory.stock.push({ product: item.product, quantity: item.quantity });
+          customerInventory.stock.push({
+            product: item.product,
+            quantity: item.quantity,
+          });
         }
       }
 
@@ -138,7 +143,6 @@ const updateInventoryAfterOrder = async (order) => {
     throw error;
   }
 };
-
 
 export const updateOrderStatusController = async (req, res, next) => {
   try {

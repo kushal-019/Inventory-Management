@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const { Schema, model } = mongoose;
 
-const ProductSchema = new Schema({
+const productSchema = new Schema({
   itemName: {
     type: String,
     required: true,
@@ -28,11 +28,11 @@ const ProductSchema = new Schema({
 });
 
 // Middleware to update the `updatedAt` field
-ProductSchema.pre("save", function (next) {
+productSchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
-const Product = model("Product", ProductSchema);
+const Product = model("Product", productSchema);
 
 export default Product;

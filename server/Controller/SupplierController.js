@@ -3,26 +3,27 @@ import Inventory from "../Models/Inventory.js";
 import userSchema from "../Models/User.js";
 import Product from "../Models/Product.js";
 
-export const DisplaySupplierController = async (req, res, next) => {
+// Display suppliers based on user role
+export const displaySupplierController = async (req, res, next) => {
   try {
-    const UserRole = req.body.role;
-    let Suppliers = [];
-    // console.log(req);
-    if (UserRole === "Customer") {
-      Suppliers = await userSchema.find({ role: "Retailer" });
-    } else if (UserRole === "Retailer") {
-      Suppliers = await userSchema.find({ role: "WholeSaler" });
+    const { role: userRole } = req.body;
+    let suppliers = [];
+
+    // Fetch suppliers based on the user's role
+    if (userRole === "Customer") {
+      suppliers = await userSchema.find({ role: "Retailer" });
+    } else if (userRole === "Retailer") {
+      suppliers = await userSchema.find({ role: "WholeSaler" });
     }
 
-    res.status(200).json({
-      Suppliers,
-    });
+    res.status(200).json({ suppliers });
   } catch (error) {
     next(error);
   }
 };
 
-export const ShowinventoryController = async (req, res, next) => {
+// Show inventory of a specific supplier
+export const showInventoryController = async (req, res, next) => {
   try {
     const { id } = req.params;
 
@@ -38,36 +39,51 @@ export const ShowinventoryController = async (req, res, next) => {
   }
 };
 
-export const UpdateInventoryController = async (req, res, next) => {
+// Update inventory for a supplier
+export const updateInventoryController = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { productId, itemName, quantity, pricePerUnit, costPerUnit } = req.body;
+    const { productId, itemName, quantity, pricePerUnit, costPerUnit } =
+      req.body;
+
 
     // Ensure the required fields are provided
-    if (!id || (productId && (quantity === undefined && pricePerUnit === undefined && costPerUnit === undefined))) {
-      return res.status(400).json({ success: false, message: "Missing required fields" });
+    if (
+      !id ||
+      (productId &&
+        quantity === null &&
+        pricePerUnit === null &&
+        costPerUnit === null)
+    ) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Missing required fields" });
     }
 
     // Find the inventory based on the inventoryId
     const supplierInventory = await Inventory.findById(id);
     if (!supplierInventory) {
-      return res.status(404).json({ success: false, message: "Inventory not found" });
+      return res
+      .status(404)
+      .json({ success: false, message: "Inventory not found" });
     }
 
     let product;
 
     if (productId) {
       // If productId is provided, find the product in the inventory and update its quantity
-      product = supplierInventory.stock.find(item => item.product.toString() === productId);
+      product = supplierInventory.stock.find(
+        (item) => item.product.toString() === productId
+      );
 
       if (product) {
-        // Update the quantity if it's provided
-        if (quantity !== undefined) {
-          product.quantity = quantity;
+       
+        if (quantity !== null) {
+          product.quantity = quantity; // Update quantity if provided
         }
-
-        // If pricePerUnit or CostPerUnit is provided, update them in the Product collection
-        if (pricePerUnit !== undefined || CostPerUnit !== undefined) {
+        
+        // If pricePerUnit or costPerUnit is provided, update them in the Product collection
+        if (pricePerUnit !== null || costPerUnit !== null) {
           await Product.findByIdAndUpdate(
             productId,
             { pricePerUnit, costPerUnit },
@@ -75,7 +91,9 @@ export const UpdateInventoryController = async (req, res, next) => {
           );
         }
       } else {
-        return res.status(404).json({ success: false, message: "Product not found in inventory" });
+        return res
+        .status(404)
+        .json({ success: false, message: "Product not found in inventory" });
       }
     } else {
       // If no productId is provided, create a new product entry and append it to the inventory
@@ -108,4 +126,3 @@ export const UpdateInventoryController = async (req, res, next) => {
     next(error);
   }
 };
-

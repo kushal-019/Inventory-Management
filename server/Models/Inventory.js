@@ -10,9 +10,9 @@ const inventorySchema = new Schema({
   },
   stock: [
     {
-      product : {
-        type : String,
-        ref : "Product",
+      product: {
+        type: String,
+        ref: "Product",
       },
       quantity: {
         type: Number,
@@ -31,7 +31,6 @@ const inventorySchema = new Schema({
   },
 });
 
-// Middleware to update the `updatedAt` field
 inventorySchema.pre("save", function (next) {
   this.updatedAt = Date.now();
   next();
