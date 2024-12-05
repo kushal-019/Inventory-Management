@@ -81,15 +81,14 @@ export const updateInventoryController = async (req, res, next) => {
         if (quantity !== null) {
           product.quantity = quantity; // Update quantity if provided
         }
-        
-        // If pricePerUnit or costPerUnit is provided, update them in the Product collection
-        if (pricePerUnit !== null || costPerUnit !== null) {
-          await Product.findByIdAndUpdate(
-            productId,
-            { pricePerUnit, costPerUnit },
-            { new: true } // Get the updated product after saving
-          );
+        // If pricePerUnit or costPerUnit is provided, update them 
+        if (pricePerUnit !== null) {
+          product.pricePerUnit = pricePerUnit; 
         }
+        if (costPerUnit !== null) {
+          product.costPerUnit = costPerUnit; 
+        }
+        
       } else {
         return res
         .status(404)
@@ -99,8 +98,6 @@ export const updateInventoryController = async (req, res, next) => {
       // If no productId is provided, create a new product entry and append it to the inventory
       const newProduct = new Product({
         itemName,
-        pricePerUnit,
-        costPerUnit,
       });
 
       await newProduct.save(); // Save the new product to the Product collection
@@ -109,6 +106,8 @@ export const updateInventoryController = async (req, res, next) => {
       product = {
         product: newProduct._id, // Store the Product ID in the inventory stock
         quantity,
+        pricePerUnit,
+        costPerUnit,
       };
 
       supplierInventory.stock.push(product); // Append the new product to the inventory stock

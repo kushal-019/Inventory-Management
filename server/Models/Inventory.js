@@ -19,6 +19,16 @@ const inventorySchema = new Schema({
         required: true,
         min: 0,
       },
+      pricePerUnit: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
+      costPerUnit: {
+        type: Number,
+        required: true,
+        min: 0,
+      },
     },
   ],
   createdAt: {

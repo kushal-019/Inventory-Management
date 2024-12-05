@@ -7,16 +7,7 @@ const productSchema = new Schema({
     type: String,
     required: true,
   },
-  pricePerUnit: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
-  costPerUnit: {
-    type: Number,
-    required: true,
-    min: 0,
-  },
+  
   createdAt: {
     type: Date,
     default: Date.now,
