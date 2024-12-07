@@ -19,7 +19,7 @@ const Signup = ({ onSwitch }) => {
   
         localStorage.setItem("authToken", token);
         alert("Signup successful!");
-    navigate("/Dashboard");
+        navigate("/home");
       } catch (error) {
         alert("Signup failed!");
       }
@@ -28,8 +28,12 @@ const Signup = ({ onSwitch }) => {
     console.log("Signing up with:", { name, email, password });
   };
 
-  return (
-    
+  return (<>
+    <nav className="sticky top-0 z-50 px-6 py-4 shadow-lg text-light bg-dark">
+    <div className="text-2xl font-bold text-center">
+          <span className="text-lightblue">Invento</span> Mart
+        </div>
+    </nav>
     <div className="flex items-center justify-center min-h-screen bg-gray-100">
       <div className="p-8 bg-white rounded-lg shadow-lg w-96">
         <h2 className="mb-4 text-2xl font-bold text-center text-[#08273e]">Sign Up</h2>
@@ -138,7 +142,7 @@ const Signup = ({ onSwitch }) => {
         </p>
       </div>
       
-    </div>
+    </div></>
   );
 };
 
