@@ -18,14 +18,21 @@ const Login = ({ onSwitch }) => {
   
         localStorage.setItem("authToken", token);
         alert("Login successful!");
-        navigate("/DashBoard")
+        navigate("/home")
       } catch (error) {
         alert("Login failed!");
       }
     
   };
 
-  return (
+  return (<>
+    <nav className="sticky top-0 z-50 px-6 py-4 shadow-lg text-light bg-dark">
+    <div className="text-2xl font-bold text-center">
+          <span className="text-lightblue">Invento</span> Mart
+        </div>
+    </nav>
+
+
     <div className="flex items-center justify-center bg-gray-100 min-h-[90vh]">
       <div className="p-8 bg-white rounded-lg shadow-lg w-96">
         <h2 className="mb-4 text-2xl font-bold text-center text-[#08273e]">Login</h2>
@@ -74,7 +81,7 @@ const Login = ({ onSwitch }) => {
           </button>
         </p>
       </div>
-    </div>
+    </div></>
   );
 };
 
