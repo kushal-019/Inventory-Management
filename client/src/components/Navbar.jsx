@@ -38,7 +38,13 @@ const Navbar = ( ) => {
           >
             Profile
           </button>
-          <button className="px-4 py-2 transition duration-300 rounded-lg bg-midblue hover:bg-lightblue">
+          <button className="px-4 py-2 transition duration-300 rounded-lg bg-midblue hover:bg-lightblue"
+          onClick={()=> {
+            localStorage.removeItem("authToken");
+            navigate('/');
+
+          }}
+          >
             Logout
           </button>
         </div>

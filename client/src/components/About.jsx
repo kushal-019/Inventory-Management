@@ -18,7 +18,7 @@ const About = () => {
         {/* Image */}
         <div className="w-full md:w-1/2">
           <img
-            src="https://via.placeholder.com/500"
+            src="C:\Users\user\Desktop\New folder (3)\react\Inventory-Management\client\src\assets\image.png"
             alt="About Us"
             className="rounded-lg shadow-lg"
           />

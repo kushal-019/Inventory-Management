@@ -14,14 +14,15 @@ const Signup = ({ onSwitch }) => {
   const handleSignup = async(e) => {
     e.preventDefault();
     try {
-        const response = await axios.post("http://localhost:4000/register", {name ,email,password,role:userType,gst,ferm});
-        const { token } = response.data;
+        // const response = await axios.post("http://localhost:4000/register", {name ,email,password,role:userType,gst,ferm});
+        // const { token } = response.data;
   
-        localStorage.setItem("authToken", token);
-        alert("Signup successful!");
+        // localStorage.setItem("authToken", token);
+        // alert("Signup successful!");
         navigate("/home");
       } catch (error) {
         alert("Signup failed!");
+        
       }
 
     
