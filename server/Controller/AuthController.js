@@ -43,7 +43,7 @@ export const loginController = async (req, res, next) => {
 
 export const registerController = async (req, res, next) => {
   try {
-    const { name, email, password, role } = req.body;
+    const { name, email, password, role , gst , ferm } = req.body;
 
     if (!name) {
       return next({
@@ -78,7 +78,7 @@ export const registerController = async (req, res, next) => {
       });
     }
 
-    const user = await userSchema.create({ name, email, password, role });
+    const user = await userSchema.create({ name, email, password, role , gst , ferm });
     const token = user.createJWT();
 
     res.status(201).json({
@@ -90,6 +90,8 @@ export const registerController = async (req, res, next) => {
         email: user.email,
         location: user.location,
         role: user.role,
+        gst  : user.gst,
+        ferm  : user.ferm,
       },
       token,
     });

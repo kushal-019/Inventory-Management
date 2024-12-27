@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-function UpdateInventory() {
+function UpdateInventory(id) {
   const [formData, setFormData] = useState({
-    id: "",
-    productId: "",
+    id: null,
+    productId: null,
     itemName: "",
     quantity: 0,
     pricePerUnit: 0,
@@ -20,10 +20,25 @@ function UpdateInventory() {
   };
 
   const updateInventory = async () => {
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No token found!");
+      return;
+    }
     try {
-      const { data } = await axios.patch(`/api/v1/supplier/updateinventory/${formData.id}`, formData);
+      console.log(id.supplierId);
+      const { data } = await axios.patch(
+        `http://localhost:8080/api/v1/supplier/updateinventory/${id.supplierId}`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Pass token in header
+          },
+        }
+      );
       alert(data.message || "Inventory updated successfully!");
       console.log("Updated Inventory:", data.inventory);
+      
     } catch (error) {
       console.error(error.message);
       alert("Error updating inventory. Please try again.");
@@ -37,7 +52,7 @@ function UpdateInventory() {
     </h2>
     <div className="overflow-y-scroll max-h-[60vh]">
     <div className="space-y-4">
-      {["id", "productId", "itemName"].map((field) => (
+      {[ "itemName"].map((field) => (
         <div key={field} className="flex flex-col">
           <label
             htmlFor={field}

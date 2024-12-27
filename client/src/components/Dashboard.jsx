@@ -8,9 +8,12 @@ import WholesalerDashBoard from "./WholesalerDashBoard";
 const Dashboard = () => {
   const navigate=useNavigate();
   const [data, setData] = useState({
+    userId : "",
     role: "",
     name: "",
     email: "",
+    gst : "",
+    ferm : "",
   });
 
   useEffect(() => {
@@ -31,6 +34,9 @@ const Dashboard = () => {
           role: decodedData.role,
           name: decodedData.name,
           email: decodedData.email,
+          gst: decodedData.gst,
+          ferm: decodedData.ferm,
+          userId : decodedData.userId,
         });
 
         console.log("Decoded data:", decodedData);

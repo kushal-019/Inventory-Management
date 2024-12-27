@@ -1,11 +1,17 @@
 import JWT from "jsonwebtoken";
 
 const userAuth = async (req, res, next) => {
-  const authHeader = req.headers.authorization;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
+  const authHeader = req.headers.authorization;
+  
+  if (!authHeader) {
     return next(new Error("Authentication failed. No token provided"));
   }
+  
+  if (!authHeader.startsWith("Bearer ")) {
+    return next(new Error("Authentication failed. Invalid token format"));
+  }
+  
 
   const token = authHeader.split(" ")[1];
 

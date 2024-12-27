@@ -6,7 +6,8 @@ import Product from "../Models/Product.js";
 // Display suppliers based on user role
 export const displaySupplierController = async (req, res, next) => {
   try {
-    const { role: userRole } = req.body;
+    console.log("request recieved")
+    const userRole = req.headers.role;
     let suppliers = [];
 
     // Fetch suppliers based on the user's role
@@ -15,7 +16,7 @@ export const displaySupplierController = async (req, res, next) => {
     } else if (userRole === "Retailer") {
       suppliers = await userSchema.find({ role: "WholeSaler" });
     }
-
+    console.log(suppliers);
     res.status(200).json({ suppliers });
   } catch (error) {
     next(error);
@@ -26,12 +27,14 @@ export const displaySupplierController = async (req, res, next) => {
 export const showInventoryController = async (req, res, next) => {
   try {
     const { id } = req.params;
+    console.log(id);
 
     // Fetch inventory and populate product details
     const userInventory = await Inventory.findOne({ userId: id }).populate({
       path: "stock.product", // Path to populate (nested path)
       model: "Product", // The model to use for populating
     });
+    console.log(userInventory)
 
     res.status(200).json(userInventory);
   } catch (error) {
@@ -45,7 +48,7 @@ export const updateInventoryController = async (req, res, next) => {
     const { id } = req.params;
     const { productId, itemName, quantity, pricePerUnit, costPerUnit } =
       req.body;
-
+      console.log(id)
 
     // Ensure the required fields are provided
     if (
@@ -60,12 +63,18 @@ export const updateInventoryController = async (req, res, next) => {
         .json({ success: false, message: "Missing required fields" });
     }
 
-    // Find the inventory based on the inventoryId
-    const supplierInventory = await Inventory.findById(id);
+    // Find the inventory based on the userId
+    let supplierInventory = await Inventory.findOne({ userId: id });
+
     if (!supplierInventory) {
-      return res
-      .status(404)
-      .json({ success: false, message: "Inventory not found" });
+      // If inventory doesn't exist for the user, create a new inventory
+      console.log(id)
+      supplierInventory = new Inventory({
+        userId: id, // Associate the new inventory with the user
+        stock: [],
+      });
+
+      await supplierInventory.save(); // Save the new inventory
     }
 
     let product;
@@ -77,22 +86,19 @@ export const updateInventoryController = async (req, res, next) => {
       );
 
       if (product) {
-       
         if (quantity !== null) {
           product.quantity = quantity; // Update quantity if provided
         }
-        // If pricePerUnit or costPerUnit is provided, update them 
         if (pricePerUnit !== null) {
-          product.pricePerUnit = pricePerUnit; 
+          product.pricePerUnit = pricePerUnit; // Update price per unit if provided
         }
         if (costPerUnit !== null) {
-          product.costPerUnit = costPerUnit; 
+          product.costPerUnit = costPerUnit; // Update cost per unit if provided
         }
-        
       } else {
         return res
-        .status(404)
-        .json({ success: false, message: "Product not found in inventory" });
+          .status(404)
+          .json({ success: false, message: "Product not found in inventory" });
       }
     } else {
       // If no productId is provided, create a new product entry and append it to the inventory

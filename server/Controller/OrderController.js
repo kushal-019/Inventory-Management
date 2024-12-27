@@ -48,7 +48,8 @@ export const receivedOrdersController = async (req, res, next) => {
 export const orderPlacedController = async (req, res, next) => {
   try {
     const { customerId, supplierId, items, totalAmount, totalCost } = req.body;
-
+console.log(req.body)
+    
     // Validate the input data
     if (!customerId || !supplierId || !items || items.length === 0) {
       return res.status(400).send({ success: false, message: "Invalid data" });

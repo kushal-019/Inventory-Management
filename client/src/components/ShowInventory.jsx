@@ -3,56 +3,51 @@ import axios from "axios";
 
 function ShowInventory({ supplierId }) {
   const [investment, setInvestment] = useState(0);
-  const [inventory, setInventory] = useState({
-    _id: "64b3f0d2f9e645a9df1f201",
-    userId: "64b1d8f1f5e645a9df1f002",
-    stock: [
-      {
-        product: {
-          _id: "64b2e4a7f9e645a9df1f101",
-          itemName: "Product A",
-          description: "High-quality product A",
-          category: "Electronics",
-        },
-        quantity: 50,
-        pricePerUnit: 20,
-        costPerUnit: 15,
-      },
-      {
-        product: {
-          _id: "64b2e4a7f9e645a9df1f102",
-          itemName: "Product B",
-          description: "High-quality product B",
-          category: "Clothing",
-        },
-        quantity: 100,
-        pricePerUnit: 30,
-        costPerUnit: 25,
-      },
-    ],
-  });
+  const [inventory, setInventory] = useState(null); // Initialize as null instead of an empty array
 
   useEffect(() => {
-    // Calculate total investment whenever inventory changes
-    const totalInvestment = inventory.stock.reduce(
-      (acc, item) => acc + item.quantity * item.costPerUnit,
-      0
-    );
-    setInvestment(totalInvestment);
+    if (inventory && inventory.stock && inventory.stock.length !== 0) {
+      // Calculate total investment whenever inventory changes
+      const totalInvestment = inventory.stock.reduce(
+        (acc, item) => acc + item.quantity * item.costPerUnit,
+        0
+      );
+      setInvestment(totalInvestment);
+    }
   }, [inventory]);
 
-  // Uncomment if fetching data is needed
-  // useEffect(() => {
-  //   const fetchInventory = async () => {
-  //     try {
-  //       const { data } = await axios.get(`/api/inventory/${supplierId}`);
-  //       setInventory(data);
-  //     } catch (error) {
-  //       console.error(error.message);
-  //     }
-  //   };
-  //   fetchInventory();
-  // }, [supplierId]);
+  useEffect(() => {
+    const fetchInventory = async () => {
+      const token = localStorage.getItem("authToken");
+      if (!token) {
+        console.error("No token found!");
+        return;
+      }
+      try {
+        console.log(supplierId);
+
+        const { data } = await axios.get(
+          `http://localhost:8080/api/v1/supplier/showinventory/${supplierId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Token in header
+            },
+          }
+        );
+        setInventory(data);
+        console.log("inventory:", data);
+      } catch (error) {
+        console.error(error.message);
+        setInventory([]); // Handle the error scenario by setting inventory to an empty array
+      }
+    };
+    fetchInventory();
+  }, [supplierId]); // Adding supplierId to dependency array
+
+
+  if (inventory === null || inventory.length === 0 || !inventory.stock) {
+    return <div>No inventory found for this supplier.</div>; // Handle empty inventory response
+  }
 
   return (
     <>
@@ -66,19 +61,19 @@ function ShowInventory({ supplierId }) {
           </p>
         </div>
         <div className="w-1/2 h-32 border-gray-300 rounded-3xl border-3 bg-gradient-to-r from-violet-500 to-fuchsia-500">
-        <p className="text-xl font-bold text-[#eee3e3ac] p-2 px-3">
-          Current Investment
+          <p className="text-xl font-bold text-[#eee3e3ac] p-2 px-3">
+            Current Investment
           </p>
           <p className="px-4 text-5xl font-bold text-right text-white">
             {investment}
           </p>
-          </div>
         </div>
+      </div>
       <div className="p-4 rounded shadow-md bg-light">
         <h2 className="p-2 text-3xl font-bold text-center text-black">
           Stock List
         </h2>
-        {inventory && (
+        {inventory && inventory.stock && inventory.stock.length > 0 && (
           <div className="w-full overflow-y-scroll border rounded-lg shadow-md max-h-96 border-lightblue">
             <table className="w-full border-collapse">
               <thead>
@@ -86,12 +81,8 @@ function ShowInventory({ supplierId }) {
                   <th className="p-3 border border-midblue">S.No:</th>
                   <th className="p-3 border border-midblue">Product Name</th>
                   <th className="p-3 border border-midblue">Quantity</th>
-                  <th className="p-3 border border-midblue">
-                    Cost price per unit
-                  </th>
-                  <th className="p-3 border border-midblue">
-                    Selling price per unit
-                  </th>
+                  <th className="p-3 border border-midblue">Cost price per unit</th>
+                  <th className="p-3 border border-midblue">Selling price per unit</th>
                 </tr>
               </thead>
               <tbody>

@@ -6,22 +6,18 @@ import OrderDetails from "./OrderDetails"
 import OrderReceived from "./OrderReceived";
 import ShowInventory from "./ShowInventory";
 import UpdateInventory from "./UpdateInventory";
-const WholesalerDashBoard = ({ data ={
-  role: "Retailer",
-  name: "John Doe",
-  email: "johndoe@example.com",
-  businessName: "Jai Traders",
-  gst:"@#578965@^382"
-}}) => {
+import axios from "axios";
+const WholesalerDashBoard = ({data}) => {
   const [activeComponent, setActiveComponent] = useState("Inventory");
   const [selectedOrder, setSelectedOrder] = useState(null);
+  const [supId, setsupId] = useState(null);
  
  
 
   // Render based on active component
   const renderContent = () => {
      if (activeComponent === "addItem") {
-      return  <UpdateInventory/>
+      return  <UpdateInventory supplierId={supId}/>
     }
     else if(activeComponent === "orderReceived"){
       return selectedOrder ? (
@@ -31,7 +27,7 @@ const WholesalerDashBoard = ({ data ={
       );
     }
     else if (activeComponent === "Inventory"){
-      return <ShowInventory/>
+      return <ShowInventory supplierId={supId} />
     }
     return null
   };
@@ -40,25 +36,28 @@ const WholesalerDashBoard = ({ data ={
   
   useEffect(() => {
     
-    // const fetchProtectedData = async () => {
-    //   const token = getCookie("userAuth"); 
-    //   if (!token) {
-    //     console.error("No token found!");
-    //     return;
-    //   }
-    //   try {
-    //     const response = await axios.get("/api/protected", {
-    //       headers: {
-    //         Authorization: `Bearer ${token}`,
-    //       },
-    //     });
-    //     console.log("Protected Data:", response.data);
-    //   } catch (error) {
-    //     console.error("Error fetching data:", error);
-    //   }
-    // };
-    // fetchProtectedData();
+    const fetchProtectedData = async () => {
+     const token = localStorage.getItem("authToken");
+    if (!token) {
+      console.error("No token found!");
+      return;
+    }
+    try {
+        const response = await axios.get(`http://localhost:8080/api/v1/supplier/showinventory/${data.userId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setsupId(data.userId);
+        console.log("Protected Data:", response.data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    fetchProtectedData();
+    console.log(data)
   }, [data]);
+
 
 
   return (
@@ -72,7 +71,7 @@ const WholesalerDashBoard = ({ data ={
           <div className="flex flex-col items-center justify-center p-2 border-[#1c618f] border-b-2 h-[35%]">
         <div className="flex items-center gap-7">
          
-          <div className="pt-2 pb-2 text-4xl font-bold text-center">{data.businessName}</div>
+          <div className="pt-2 pb-2 text-4xl font-bold text-center">{data.ferm}</div>
         </div>
         <p className="text-white">Email: {data.email}</p>
         <p className="text-white">GST: {data.gst}</p>

@@ -28,6 +28,12 @@ const userSchema = new mongoose.Schema({
     minlength: [6, "Minimum 6 characters expected"],
     select: false,
   },
+  gst: {
+    type: String,
+  },
+  ferm: {
+    type: String,
+  },
 });
 
 userSchema.pre("save", async function () {
@@ -42,7 +48,7 @@ userSchema.methods.comparePassword = async function (userPassword) {
 };
 
 userSchema.methods.createJWT = function () {
-  return JWT.sign({ userId: this._id , name : this.name , role : this.role , email : this.email }, process.env.JWTTOKEN, {
+  return JWT.sign({ userId: this._id , name : this.name , role : this.role , email : this.email , gst : this.gst , ferm : this.ferm }, process.env.JWTTOKEN, {
     expiresIn: "5d",
   });
 };
