@@ -14,14 +14,15 @@ const Signup = ({ onSwitch }) => {
   const handleSignup = async(e) => {
     e.preventDefault();
     try {
-        // const response = await axios.post("http://localhost:4000/register", {name ,email,password,role:userType,gst,ferm});
-        // const { token } = response.data;
+        const response = await axios.post("http://localhost:8080/api/v1/auth/register", {name ,email,password,role:userType,gst,ferm});
+        const { token } = response.data;
   
-        // localStorage.setItem("authToken", token);
-        // alert("Signup successful!");
+        localStorage.setItem("authToken", token);
+        alert("Signup successful!");
         navigate("/home");
       } catch (error) {
         alert("Signup failed!");
+        console.log(error);
         
       }
 
@@ -68,7 +69,7 @@ const Signup = ({ onSwitch }) => {
               required
             />
           </div>
-            {(userType=='Retailer' || userType=='Wholesaler')?<>
+            {(userType=='Retailer' || userType=='WholeSaler')?<>
             <div className="mb-2">
             <label htmlFor="name" className="block text-sm font-medium text-gray-700">
               Business Name
@@ -125,7 +126,7 @@ const Signup = ({ onSwitch }) => {
             >
               <option value="Customer">Customer</option>
               <option value="Retailer">Retailer</option>
-              <option value="Wholesaler">Wholesaler</option>
+              <option value="WholeSaler">Wholesaler</option>
             </select>
           </div>
           <button

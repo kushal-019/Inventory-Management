@@ -42,7 +42,7 @@ userSchema.methods.comparePassword = async function (userPassword) {
 };
 
 userSchema.methods.createJWT = function () {
-  return JWT.sign({ userId: this._id }, process.env.JWTTOKEN, {
+  return JWT.sign({ userId: this._id , name : this.name , role : this.role , email : this.email }, process.env.JWTTOKEN, {
     expiresIn: "5d",
   });
 };

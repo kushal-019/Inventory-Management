@@ -1,13 +1,17 @@
-const errorMiddleWare = (err, req, res, next) => {
-  console.error(err); // Log the error for debugging purposes
+const errorMiddleware = (err, req, res, next) => {
+  // Log the error for debugging (only in development mode)
+  if (process.env.NODE_ENV === "development") {
+    console.error(err);
+  }
 
+  // Default error response
   const defaultError = {
     success: false,
     message: err.message || "Something went wrong",
     statusCode: err.statusCode || 500,
   };
 
-  // Handle ValidationError from Mongoose
+  // Handle Mongoose validation errors
   if (err.name === "ValidationError") {
     defaultError.statusCode = 400;
     defaultError.message = Object.values(err.errors)
@@ -15,10 +19,10 @@ const errorMiddleWare = (err, req, res, next) => {
       .join(", ");
   }
 
-  // Handle MongoDB duplicate key errors (11000 code)
+  // Handle MongoDB duplicate key errors (code 11000)
   if (err.code === 11000) {
     defaultError.statusCode = 400;
-    defaultError.message = `${Object.keys(err.keyValue)} field must be unique`;
+    defaultError.message = `${Object.keys(err.keyValue).join(", ")} field must be unique`;
   }
 
   // Handle JWT errors
@@ -27,15 +31,11 @@ const errorMiddleWare = (err, req, res, next) => {
     defaultError.message = "Invalid or expired token";
   }
 
-  // Handle any other specific error types you want
-  if (err.statusCode === 404) {
-    defaultError.message = "Resource not found";
-  }
-
+  // Send the error response as JSON
   res.status(defaultError.statusCode).json({
     success: false,
     message: defaultError.message,
   });
 };
 
-export default errorMiddleWare;
+export default errorMiddleware;

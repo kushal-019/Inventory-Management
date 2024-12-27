@@ -19,18 +19,18 @@ app.use(cookieParser());
 
 // CORS configuration for production
 const corsOptions = {
-  origin: process.env.CLIENT_URL || 'http://localhost:3000', //  frontend URL
+  origin: process.env.CLIENT_URL || 'http://localhost:5173', //  frontend URL
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true, // For cookies and authentication headers
 };
 app.use(cors(corsOptions));
 
-app.use(errorMiddleWare);
-
 // API routes
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/orders", orderRouter);
 app.use("/api/v1/supplier", supplierRouter);
+
+app.use(errorMiddleWare);
 
 const port = process.env.PORT || 8080;
 

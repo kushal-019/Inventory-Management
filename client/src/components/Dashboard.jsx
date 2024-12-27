@@ -8,49 +8,48 @@ import WholesalerDashBoard from "./WholesalerDashBoard";
 const Dashboard = () => {
   const navigate=useNavigate();
   const [data, setData] = useState({
-    role: "Customer",
-    name: "John Doe",
-    email: "johndoe@example.com",
+    role: "",
+    name: "",
+    email: "",
   });
 
-  const getCookie = (cookieName) => {
-    const cookies = document.cookie.split("; ");
-    for (let cookie of cookies) {
-      const [key, value] = cookie.split("=");
-      if (key === cookieName) {
-        return decodeURIComponent(value);
-      }
-    }
-    return null;
-  };
-
-
   useEffect(() => {
-    const fetchUserData = () => {
+       const fetchUserData = () => {
       try {
-        const token = getCookie("userAuth");
+        const token = localStorage.getItem("authToken");
         if (!token) {
           console.error("No token found!");
-            alert("Please log in first.");
-            navigate('/');
-            return;
+          alert("Please log in first.");
+          navigate("/");
+          return;
         }
 
-        const decodedData = jwtDecode(token); 
-        setData(decodedData);
+        const decodedData = jwtDecode(token);
+
+        // Update the state with decoded data
+        setData({
+          role: decodedData.role,
+          name: decodedData.name,
+          email: decodedData.email,
+        });
+
+        console.log("Decoded data:", decodedData);
+        console.log("data:", data);
       } catch (error) {
         console.error("Error decoding token:", error);
       }
     };
 
     fetchUserData();
-  }, []);
+  }, [navigate]);
 
+
+  
   return (
     <>
       {data.role === "Customer" && <UserDashboard data={data} />}
       {data.role === "Retailer" && <RetailerDashboard data={data} />}
-      {data.role === "Wholesaler" && <WholesalerDashBoard data={data} />}
+      {data.role === "WholeSaler" && <WholesalerDashBoard data={data} />}
     </>
   );
 };
