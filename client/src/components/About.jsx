@@ -1,4 +1,5 @@
 import React from 'react';
+import image from '../assets/image.png';
 
 const About = () => {
   return (
@@ -18,9 +19,9 @@ const About = () => {
         {/* Image */}
         <div className="w-full md:w-1/2">
           <img
-            src="C:\Users\user\Desktop\New folder (3)\react\Inventory-Management\client\src\assets\image.png"
+            src={image}
             alt="About Us"
-            className="rounded-lg shadow-lg"
+            className="shadow-2xl rounded-2xl shadow-midblue "
           />
         </div>
         {/* Text */}

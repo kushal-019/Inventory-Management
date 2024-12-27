@@ -6,7 +6,7 @@ import OrderDetails from "./OrderDetails"
 import RetailerList from "./RetailerList";
 import RetailerProducts from "./RetailerProducts";
 import OrderReceived from "./OrderReceived";
-
+import ShowInventory from "./ShowInventory";
 const RetailerDashboard = ({ data ={
   role: "Retailer",
   name: "John Doe",
@@ -14,8 +14,7 @@ const RetailerDashboard = ({ data ={
   businessName: "Jai Traders",
   gst:"@#578965@^382"
 }}) => {
-  console.log(data);
-  const [activeComponent, setActiveComponent] = useState("OrderHistory");
+  const [activeComponent, setActiveComponent] = useState("Inventory");
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [selectedRetailer, setSelectedRetailer] = useState(null);
  
@@ -46,7 +45,10 @@ const RetailerDashboard = ({ data ={
         <OrderReceived onSelectOrder={setSelectedOrder} /></>
       );
     }
-    return null;
+    else if (activeComponent === "Inventory"){
+      return <ShowInventory/>
+    }
+    return null
   };
 
 
@@ -95,11 +97,11 @@ const RetailerDashboard = ({ data ={
        
           <button
               className={`w-full text-left px-4 py-2 mb-2 rounded-lg ${
-                activeComponent === "Inventry" ? "bg-midblue" : "hover:bg-lightblue"
+                activeComponent === "Inventory" ? "bg-midblue" : "hover:bg-lightblue"
               }`}
-              onClick={() => setActiveComponent("Inventry")}
+              onClick={() => setActiveComponent("Inventory")}
             >
-              Manage Inventry
+              Manage Inventory
             </button>
             <button
               className={`w-full text-left px-4 py-2 mb-2 rounded-lg ${

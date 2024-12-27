@@ -1,13 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect} from 'react';
+import { useNavigate } from "react-router-dom";
 import Navbar from './Navbar';
 import About from './About';
 const Home = () => {
-
+  const navigate=useNavigate();
     useEffect(() => { (async () => {
         const token = localStorage.getItem("authToken");
         if (!token ) {
-          // alert("Please log in first.");
-          // navigate('/');
+          alert("Please log in first.");
+          navigate('/');
           return;
         }
   
