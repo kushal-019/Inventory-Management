@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react'
 
 const RetailerList = ({ onSelectRetailer }) => {
@@ -13,8 +14,7 @@ const RetailerList = ({ onSelectRetailer }) => {
             console.error("No token found!");
             return;
           }
-      
-          console.log(token);
+            const role = jwtDecode(token).role;
       
           try {
             const response = await axios.get(
@@ -22,7 +22,7 @@ const RetailerList = ({ onSelectRetailer }) => {
               {
                 headers: {
                   Authorization: `Bearer ${token}`, // Pass token in header
-                  Role: "Retailer",  // Pass role in headers
+                  Role: role,  // Pass role in headers
                 },
               }
             );

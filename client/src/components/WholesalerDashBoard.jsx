@@ -23,7 +23,7 @@ const WholesalerDashBoard = ({data}) => {
       return selectedOrder ? (
         <OrderDetails order={selectedOrder} onBack={ ()=> setSelectedOrder(null)} />
       ) : (<>
-        <OrderReceived onSelectOrder={setSelectedOrder} /></>
+        <OrderReceived onSelectOrder={setSelectedOrder} supplierId = {supId} /></>
       );
     }
     else if (activeComponent === "Inventory"){
@@ -43,13 +43,13 @@ const WholesalerDashBoard = ({data}) => {
       return;
     }
     try {
-        const response = await axios.get(`http://localhost:8080/api/v1/supplier/showinventory/${data.userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        // const response = await axios.get(`http://localhost:8080/api/v1/supplier/showinventory/${data.userId}`, {
+        //   headers: {
+        //     Authorization: `Bearer ${token}`,
+        //   },
+        // });
         setsupId(data.userId);
-        console.log("Protected Data:", response.data);
+        // console.log("Protected Data:", response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }

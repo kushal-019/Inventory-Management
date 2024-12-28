@@ -7,6 +7,7 @@ import RetailerList from "./RetailerList";
 import RetailerProducts from "./RetailerProducts";
 import OrderReceived from "./OrderReceived";
 import ShowInventory from "./ShowInventory";
+import axios from "axios";
 const RetailerDashboard = ({ data}) => {
   const [activeComponent, setActiveComponent] = useState("Inventory");
   const [selectedOrder, setSelectedOrder] = useState(null);

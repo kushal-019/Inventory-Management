@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 
 function ShowInventory({ supplierId }) {
+  console.log(supplierId);
   const [investment, setInvestment] = useState(0);
   const [inventory, setInventory] = useState(null); // Initialize as null instead of an empty array
 
