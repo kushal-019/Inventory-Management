@@ -1,4 +1,5 @@
-# MERN Stack Project
+# InventoMart
+## Mern Stack Project
 
 ## Overview
 
