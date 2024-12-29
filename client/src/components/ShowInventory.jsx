@@ -1,10 +1,19 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
 
 function ShowInventory({ supplierId }) {
-  console.log(supplierId);
   const [investment, setInvestment] = useState(0);
   const [inventory, setInventory] = useState(null); // Initialize as null instead of an empty array
+  const [role, setRole] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      setRole(decodedToken.role); // Assuming role is in the token
+    }
+  }, []);
 
   useEffect(() => {
     if (inventory && inventory.stock && inventory.stock.length !== 0) {
@@ -25,8 +34,6 @@ function ShowInventory({ supplierId }) {
         return;
       }
       try {
-        console.log(supplierId);
-
         const { data } = await axios.get(
           `http://localhost:8080/api/v1/supplier/showinventory/${supplierId}`,
           {
@@ -36,18 +43,21 @@ function ShowInventory({ supplierId }) {
           }
         );
         setInventory(data);
-        console.log("inventory:", data);
       } catch (error) {
         console.error(error.message);
         setInventory([]); // Handle the error scenario by setting inventory to an empty array
       }
     };
     fetchInventory();
-  }, [supplierId]); // Adding supplierId to dependency array
+  }, [supplierId]);
 
+  const handleEdit = (itemId, field, value) => {
+    // Handle the edit logic here, e.g., make a PUT request to update the product details
+    console.log(`Edit ${field} for item ${itemId} with value: ${value}`);
+  };
 
   if (inventory === null || inventory.length === 0 || !inventory.stock) {
-    return <div>No inventory found for this supplier.</div>; // Handle empty inventory response
+    return <div>No inventory found for this supplier.</div>;
   }
 
   return (
@@ -84,6 +94,7 @@ function ShowInventory({ supplierId }) {
                   <th className="p-3 border border-midblue">Quantity</th>
                   <th className="p-3 border border-midblue">Cost price per unit</th>
                   <th className="p-3 border border-midblue">Selling price per unit</th>
+                  {role === "wholesaler" && <th className="p-3 border border-midblue">Edit</th>}
                 </tr>
               </thead>
               <tbody>
@@ -99,11 +110,46 @@ function ShowInventory({ supplierId }) {
                       {item.quantity}
                     </td>
                     <td className="p-2 border border-midblue text-dark">
-                      {item.costPerUnit}
+                      {role === "WholeSaler" ? (
+                        <>
+                          <input
+                            type="number"
+                            value={item.costPerUnit}
+
+                            onChange={(e) =>
+                              handleEdit(item.product.itemId, "costPerUnit", e.target.value)
+                            }
+                          />
+                        </>
+                      ) : (
+                        item.costPerUnit
+                      )}
                     </td>
                     <td className="p-2 border border-midblue text-dark">
-                      {item.pricePerUnit}
+                      {role === "WholeSaler" || role === "Retailer" ? (
+                        <>
+                          <input
+                            type="number"
+                            value={item.pricePerUnit}
+                            onChange={(e) =>
+                              handleEdit(item.product.itemId, "pricePerUnit", e.target.value)
+                            }
+                          />
+                        </>
+                      ) : (
+                        item.pricePerUnit
+                      )}
                     </td>
+                    {role === "WholeSaler" && (
+                      <td className="p-2 border border-midblue text-dark">
+                        <button onClick={() => handleEdit(item.product.itemId, "itemName", "New Name")}>
+                          Edit Name
+                        </button>
+                        <button onClick={() => handleEdit(item.product.itemId, "pricePerUnit", 100)}>
+                          Edit Price
+                        </button>
+                      </td>
+                    )}
                   </tr>
                 ))}
               </tbody>
