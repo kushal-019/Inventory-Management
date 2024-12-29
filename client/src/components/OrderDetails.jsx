@@ -1,6 +1,7 @@
 import React from 'react'
 import { BsArrowLeft } from 'react-icons/bs'
 const OrderDetails = ({ order, onBack }) => {
+    console.log("order : " ,order)
     return (
         <div >
 
@@ -30,7 +31,8 @@ const OrderDetails = ({ order, onBack }) => {
                                 className="hover:bg-midblue bg-light"
                             >
                                 <td className="p-2 border border-midblue text-dark">{index + 1}</td>
-                                <td className="p-2 border border-midblue text-dark">{item.product}</td>
+                                <td className="p-2 border border-midblue text-dark">{item.product.itemName
+                                }</td>
                                 <td className="p-2 border border-midblue text-dark">{item.quantity}</td>
                             </tr>
                         ))}

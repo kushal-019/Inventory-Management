@@ -2,62 +2,39 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 const OrderHistory = ({ onSelectOrder }) => {
-    const [orders, setOrders] = useState([
-        {
-          "_id": "order_id", 
-          "userId": "user_id", 
-          "supplierId": {
-            "name": "Supplier Name", 
-            "lastName": "Supplier Last Name"
-          },
-          "status": "Pending",
-          "orderItems": [
-            {
-              "product": "product_id", 
-              "quantity": 5
-            },
-            {
-              "product": "product_id", 
-              "quantity": 5
-            },
-            {
-              "product": "product_id", 
-              "quantity": 5
+    const [orders, setOrders] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const token = localStorage.getItem("authToken");
+
+    useEffect(() => {
+        const fetchOrders = async () => {
+            try {
+                  const response =await  axios.get("http://localhost:8080/api/v1/orders/orderhistory",
+                  {
+                    headers: {
+                      Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+                    },
+                  }
+                );
+                setOrders(response.data.placedOrders || []);
+            } catch (err) {
+                console.error("Error fetching order history:", err);
+                setError("Failed to load order history. Please try again.");
+            } finally {
+                setLoading(false);
             }
-          ],
-          "totalCost": 1000,
-          "totalAmount": 1200,
-          "createdAt": "2024-12-22T00:00:00.000Z",
-          "updatedAt": "2024-12-22T00:00:00.000Z"
-        },
+        };
+        fetchOrders();
+    }, []);
 
-    ]
-    );
-    // const [loading, setLoading] = useState(true);
-    // const [error, setError] = useState(null);
+    if (loading) {
+        return <p className="font-semibold ">Loading order history...</p>;
+    }
 
-    // useEffect(() => {
-    //     const fetchOrders = async () => {
-    //         try {
-    //             const response = await axios.get("https://localhost:8080/api/v1/orders/orderhistory");
-    //             setOrders(response.data.placedOrders || []);
-    //         } catch (err) {
-    //             console.error("Error fetching order history:", err);
-    //             setError("Failed to load order history. Please try again.");
-    //         } finally {
-    //             setLoading(false);
-    //         }
-    //     };
-    //     fetchOrders();
-    // }, []);
-
-    // if (loading) {
-    //     return <p className="font-semibold ">Loading order history...</p>;
-    // }
-
-    // if (error) {
-    //     return <p className="text-red-500">{error}</p>;
-    // }
+    if (error) {
+        return <p className="text-red-500">{error}</p>;
+    }
 
     return (
         <div className="p-6">

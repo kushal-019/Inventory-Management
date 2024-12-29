@@ -8,9 +8,13 @@ export const orderHistoryController = async (req, res, next) => {
     const userId = req.user.userId;
 
     const placedOrders = await Orders.find({ userId }).populate({
-      path: "supplierId",
-      select: "name lastName",
-    });
+        path: "supplierId",
+      select: "name lastName", // Only populate these fields for `userId`
+      })
+      .populate({
+        path: "orderItems.product", // Path to the product field in orderItems
+        model: "Product", // Ensure this matches the model name in your Product schema
+      });
 
     const formattedOrders = placedOrders.map((order) => ({
       ...order.toObject(),
@@ -28,10 +32,15 @@ export const receivedOrdersController = async (req, res, next) => {
   try {
     const userId = req.user.userId;
 
-    const receivedOrders = await Orders.find({ supplierId: userId }).populate({
-      path: "userId",
-      select: "name lastName",
-    });
+    const receivedOrders = await Orders.find({ supplierId: userId })
+      .populate({
+        path: "userId",
+        select: "name lastName", // Only populate these fields for `userId`
+      })
+      .populate({
+        path: "orderItems.product", // Path to the product field in orderItems
+        model: "Product", // Ensure this matches the model name in your Product schema
+      });
 
     const formattedOrders = receivedOrders.map((order) => ({
       ...order.toObject(),
@@ -48,8 +57,8 @@ export const receivedOrdersController = async (req, res, next) => {
 export const orderPlacedController = async (req, res, next) => {
   try {
     const { customerId, supplierId, items, totalAmount, totalCost } = req.body;
-console.log(req.body)
-    
+    console.log(req.body);
+
     // Validate the input data
     if (!customerId || !supplierId || !items || items.length === 0) {
       return res.status(400).send({ success: false, message: "Invalid data" });
@@ -110,13 +119,19 @@ const updateInventoryAfterOrder = async (order) => {
     await supplierInventory.save();
 
     // If customer is a retailer, update their inventory
-    if (customer.role === "retailer") {
-      const customerInventory = await Inventory.findOne({
-        userId: customer._id,
+    if (customer.role === "Retailer") {
+      let customerInventory = await Inventory.findOne({
+        userId: userId,
       });
 
       if (!customerInventory) {
-        throw new Error("Retailer inventory not found");
+        // If inventory doesn't exist for the user, create a new inventory
+        customerInventory = new Inventory({
+          userId: userId, // Associate the new inventory with the user
+          stock: [],
+        });
+
+        await customerInventory.save(); // Save the new inventory
       }
 
       for (let item of orderItems) {
@@ -131,6 +146,8 @@ const updateInventoryAfterOrder = async (order) => {
           customerInventory.stock.push({
             product: item.product,
             quantity: item.quantity,
+            costPerUnit : item.pricePerUnit,
+            pricePerUnit : item.pricePerUnit,
           });
         }
       }
@@ -147,7 +164,7 @@ const updateInventoryAfterOrder = async (order) => {
 
 export const updateOrderStatusController = async (req, res, next) => {
   try {
-    const { orderId, status } = req.body;
+    const { orderId, status } = req.body.detail;
 
     if (!["Pending", "Rejected", "Confirmed"].includes(status)) {
       return res.status(400).json({ message: "Invalid status value" });

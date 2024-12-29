@@ -1,35 +1,25 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-const OrderReceived = ({ onSelectOrder }) => {
-  const [orders, setOrders] = useState([
-    {
-      _id: "order_id",
-      userId: "user_id",
-      supplierId: {
-        name: "Supplier Name",
-        lastName: "Supplier Last Name",
-      },
-      status: "Pending",
-      orderItems: [
-        { product: "product_id", quantity: 5 },
-        { product: "product_id", quantity: 5 },
-        { product: "product_id", quantity: 5 },
-      ],
-      totalCost: 1000,
-      totalAmount: 1200,
-      createdAt: "2024-12-22T00:00:00.000Z",
-      updatedAt: "2024-12-22T00:00:00.000Z",
-    },
-  ]);
+const OrderReceived = ({ onSelectOrder, supplierId }) => {
+  const [orders, setOrders] = useState([]);
+  const token = localStorage.getItem("authToken");
 
   const handleReject = async (order) => {
-    const reject = { orderId: order._id, status: "Rejected" };
+    const detail = { orderId: order._id, status: "Rejected" };
     try {
       await axios.patch(
-        "https://localhost:8080/api/v1/orders/updateOrderStatus",
-        reject
+        "http://localhost:8080/api/v1/orders/updateOrderStatus",
+        {
+          detail, // The data payload
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+          },
+        }
       );
+
       setOrders((prevOrders) =>
         prevOrders.map((o) =>
           o._id === order._id ? { ...o, status: "Rejected" } : o
@@ -41,12 +31,20 @@ const OrderReceived = ({ onSelectOrder }) => {
   };
 
   const handleApprove = async (order) => {
-    const approve = { orderId: order._id, status: "Confirmed" };
+    const detail = { orderId: order._id, status: "Confirmed" };
     try {
       await axios.patch(
-        "https://localhost:8080/api/v1/orders/updateOrderStatus",
-        approve
+        "http://localhost:8080/api/v1/orders/updateOrderStatus",
+        {
+          detail, // The data payload
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add the token in the Authorization header
+          },
+        }
       );
+
       setOrders((prevOrders) =>
         prevOrders.map((o) =>
           o._id === order._id ? { ...o, status: "Confirmed" } : o
@@ -56,6 +54,33 @@ const OrderReceived = ({ onSelectOrder }) => {
       console.error("Error approving order:", error);
     }
   };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      if (!token) {
+        console.error("No token found!");
+        return;
+      }
+      try {
+        console.log(supplierId);
+
+        const { data } = await axios.get(
+          `http://localhost:8080/api/v1/orders/orderrecieved`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Token in header
+            },
+          }
+        );
+        setOrders(data.receivedOrders);
+        console.log("orders:", data);
+      } catch (error) {
+        console.error(error.message);
+        setInventory([]); // Handle the error scenario by setting inventory to an empty array
+      }
+    };
+    fetchOrders();
+  }, [supplierId]);
 
   return (
     <div>
@@ -80,12 +105,12 @@ const OrderReceived = ({ onSelectOrder }) => {
                 </h3>
                 <div className="flex justify-between text-xl font-semibold">
                   <p className="text-xl font-semibold">
-                    Supplier: {order.supplierId.name}
+                    Supplier: {order.userId.name}
                   </p>
                   <p>Amount: {order.totalAmount}</p>
                   {order.status === "Pending" ? (
                     <div className="flex gap-2 h-9">
-                      
+
                       <button
                         className="px-2 text-xl font-semibold border-2 bg-midblue border-light rounded-xl"
                         onClick={(e) => {

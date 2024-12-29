@@ -30,7 +30,8 @@ export const showInventoryController = async (req, res, next) => {
     console.log(id);
 
     // Fetch inventory and populate product details
-    const userInventory = await Inventory.findOne({ userId: id }).populate({
+    const userInventory = await Inventory.findOne({ userId: id })
+    .populate({
       path: "stock.product", // Path to populate (nested path)
       model: "Product", // The model to use for populating
     });
