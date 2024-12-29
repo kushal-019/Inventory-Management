@@ -1,6 +1,8 @@
 import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Signup = ({ onSwitch }) => {
   const [name, setName] = useState("");
   const [ferm, setFerm] = useState("");
@@ -18,10 +20,10 @@ const Signup = ({ onSwitch }) => {
         const { token } = response.data;
   
         localStorage.setItem("authToken", token);
-        alert("Signup successful!");
+        toast.success("Signup successful!");
         navigate("/home");
       } catch (error) {
-        alert("Signup failed!");
+        toast.error("Signup failed!");
         console.log(error);
         
       }

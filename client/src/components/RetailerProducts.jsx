@@ -2,6 +2,8 @@ import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 import React, { useEffect, useState } from 'react';
 import { BsArrowLeft } from 'react-icons/bs';
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RetailerProducts = ({ retailer, onBack }) => {
   const [totalcost, setTotalcost] = useState(0);
@@ -103,13 +105,13 @@ const RetailerProducts = ({ retailer, onBack }) => {
   
       // Handle the response
       if (response.data.success) {
-        alert("Order placed successfully!");
+        toast.success("Order placed successfully!");
         setCart([]); // Clear the cart after successful order
         setTotalamount(0); // Reset total amount
         setTotalcost(0); // Reset total cost
         console.log("Order Details:", response.data.order); // Log the order details
       } else {
-        alert("Failed to place order. Please try again.");
+        toast.error("Failed to place order. Please try again.");
       }
     } catch (error) {
       console.error("Error placing order:", error.message);

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 function UpdateInventory(id) {
   const [formData, setFormData] = useState({
     id: null,
@@ -36,12 +37,12 @@ function UpdateInventory(id) {
           },
         }
       );
-      alert(data.message || "Inventory updated successfully!");
+      toast.success(data.message || "Inventory updated successfully!");
       console.log("Updated Inventory:", data.inventory);
       
     } catch (error) {
       console.error(error.message);
-      alert("Error updating inventory. Please try again.");
+      toast.error("Error updating inventory. Please try again.");
     }
   };
 

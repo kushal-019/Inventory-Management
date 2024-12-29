@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import {  toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Login = ({ onSwitch }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -19,17 +20,15 @@ const Login = ({ onSwitch }) => {
         credentials
       );
 
-      console.log(response)
   
       // Extract token from response data
       const token = response.data.token;
 
-      console.log(token)
   
       // Save token to localStorage
       localStorage.setItem("authToken", token);
   
-      alert("Login successful!");
+      toast.success("Login successful!");
       navigate("/home");
     } catch (error) {
       // Log full error details for debugging
@@ -41,7 +40,7 @@ const Login = ({ onSwitch }) => {
           ? error.response.data.message
           : "An unexpected error occurred";
   
-      alert(`Login failed: ${errorMessage}`);
+     toast.error(`Login failed: ${errorMessage}`);
     }
   };
   
