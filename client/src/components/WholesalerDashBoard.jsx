@@ -190,17 +190,17 @@ const WholesalerDashboard = ({ data }) => {
   return (
     <div className="flex min-h-screen bg-gray-100">
       {/* Sidebar */}
-      <div className="w-1/4 p-4 bg-gray-900 text-white">
+      <div className="w-1/4 p-4 text-white bg-gray-900">
         <Link to="/home" className="block mb-6">
-          <ArrowLeft className="w-8 h-8 p-1 hover:bg-gray-800 rounded-lg" />
+          <ArrowLeft className="w-8 h-8 p-1 rounded-lg hover:bg-gray-800" />
         </Link>
 
         {/* Profile Section */}
-        <div className="py-6 border-b border-gray-700 mb-6">
-          <div className="text-2xl font-bold text-center mb-2">
+        <div className="py-6 mb-6 border-b border-gray-700">
+          <div className="mb-2 text-2xl font-bold text-center">
             {data.ferm}
           </div>
-          <div className="text-gray-300 text-sm space-y-1">
+          <div className="space-y-1 text-sm text-gray-300">
             <p>Email: {data.email}</p>
             <p>GST: {data.gst}</p>
           </div>
@@ -213,8 +213,8 @@ const WholesalerDashboard = ({ data }) => {
               key={item.id}
               className={`w-full text-left px-4 py-2 rounded-lg transition-colors ${
                 activeComponent === item.id
-                  ? "bg-blue-600"
-                  : "hover:bg-gray-800"
+                  ? "bg-midblue"
+                  : "hover:bg-lightblue"
               }`}
               onClick={() => setActiveComponent(item.id)}
             >

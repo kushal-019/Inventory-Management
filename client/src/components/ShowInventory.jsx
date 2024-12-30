@@ -138,7 +138,7 @@ const ShowInventory = ({ supplierId }) => {
 
   if (error) {
     return (
-      <div className="p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+      <div className="p-4 text-red-700 bg-red-100 border border-red-400 rounded">
         <p>{error}</p>
       </div>
     );
@@ -146,7 +146,7 @@ const ShowInventory = ({ supplierId }) => {
 
   if (!inventory?.stock?.length) {
     return (
-      <div className="p-4 bg-blue-100 border border-blue-400 text-blue-700 rounded">
+      <div className="p-4 text-blue-700 bg-blue-100 border border-blue-400 rounded">
         <p>No inventory found for this supplier.</p>
       </div>
     );
@@ -154,21 +154,29 @@ const ShowInventory = ({ supplierId }) => {
 
   return (
     <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2">
-        <div className="p-6 bg-white rounded-lg shadow">
-          <h3 className="text-xl text-gray-500 mb-2">Stock Available</h3>
-          <p className="text-4xl font-bold">{inventory.stock.length}</p>
+      <div className="flex gap-2 w-[100%]">
+        <div className="w-1/2 h-32 border-gray-300 rounded-3xl border-3 bg-gradient-to-r from-sky-500 to-indigo-500">
+          <p className="text-xl font-bold text-[#eee3e3ac] p-2 px-3">
+            Stock's Available
+          </p>
+          <p className="px-4 text-5xl font-bold text-right text-white">
+            {inventory.stock.length}
+          </p>
         </div>
 
-        <div className="p-6 bg-white rounded-lg shadow">
-          <h3 className="text-xl text-gray-500 mb-2">Current Investment</h3>
-          <p className="text-4xl font-bold">₹{investment.toLocaleString()}</p>
+        <div className="w-1/2 h-32 border-gray-300 rounded-3xl border-3 bg-gradient-to-r from-violet-500 to-fuchsia-500">
+          <p className="text-xl font-bold text-[#eee3e3ac] p-2 px-3">
+            Current Investment
+          </p>
+          <p className="px-4 text-5xl font-bold text-right text-white">
+            {investment}
+          </p>
         </div>
       </div>
 
       <div className="bg-white rounded-lg shadow">
         <div className="p-6">
-          <h2 className="text-2xl font-bold mb-4">Stock List</h2>
+          <h2 className="mb-4 text-2xl font-bold">Stock List</h2>
           <div className="overflow-x-auto">
             <table className="w-full border-collapse">
               <thead className="bg-gray-50">
@@ -268,7 +276,7 @@ const ShowInventory = ({ supplierId }) => {
                           <button
                             onClick={() => handleSave(item.product._id)}
                             disabled={isSaving}
-                            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 disabled:bg-blue-300"
+                            className="px-4 py-2 text-white rounded bg-midblue hover:bg-lightblue disabled:bg-blue-300"
                           >
                             {isSaving ? "Saving..." : "Save"}
                           </button>

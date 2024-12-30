@@ -6,7 +6,10 @@ const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("authToken");
 
   if (!token) {
-    toast.warn("You must be logged in to access this page.");
+    setTimeout(()=>{
+      toast.warn("You must be logged in to access this page.");
+
+    },1000);
     return <Navigate to="/" replace />;
   }
 

@@ -86,29 +86,28 @@ const Home = () => {
       <Navbar />
       
       {/* Hero Section */}
-      <section className="py-20 px-4 bg-white">
+      <section className="px-4 py-20 bg-white">
         <div className="max-w-6xl mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          <h1 className="mb-6 text-4xl font-bold text-gray-900 md:text-5xl">
             Welcome to Invento Mart
           </h1>
-          <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          <p className="max-w-2xl mx-auto mb-8 text-xl text-gray-600">
             Manage your inventory efficiently and shop with ease. Experience innovation 
             and simplicity all in one place.
           </p>
-          <button className="bg-blue-600 text-white px-8 py-3 rounded-lg 
-            hover:bg-blue-700 transition-colors font-medium">
+          <button className="px-8 py-3 font-medium text-white transition-colors rounded-lg bg-midblue hover:bg-lightblue">
             Explore Now
           </button>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="py-16 px-4 bg-gray-50">
+      <section className="px-4 py-16 bg-gray-50">
         <div className="max-w-6xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
+          <div className="grid gap-8 md:grid-cols-3">
             {/* Feature 1 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="p-6 bg-white rounded-lg shadow-sm">
+              <h3 className="mb-4 text-xl font-semibold text-gray-900">
                 Easy Inventory Management
               </h3>
               <p className="text-gray-600">
@@ -118,8 +117,8 @@ const Home = () => {
             </div>
 
             {/* Feature 2 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="p-6 bg-white rounded-lg shadow-sm">
+              <h3 className="mb-4 text-xl font-semibold text-gray-900">
                 Seamless E-Commerce
               </h3>
               <p className="text-gray-600">
@@ -129,8 +128,8 @@ const Home = () => {
             </div>
 
             {/* Feature 3 */}
-            <div className="bg-white p-6 rounded-lg shadow-sm">
-              <h3 className="text-xl font-semibold text-gray-900 mb-4">
+            <div className="p-6 bg-white rounded-lg shadow-sm">
+              <h3 className="mb-4 text-xl font-semibold text-gray-900">
                 Customizable Solutions
               </h3>
               <p className="text-gray-600">
