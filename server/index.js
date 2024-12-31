@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 // CORS configuration for production
 const corsOptions = {
-  origin: "https://inventory-management-ihxslzrpy-kushal-goels-projects.vercel.app", //  frontend URL
+  origin: "https://inventory-management-seven-brown.vercel.app", //  frontend URL
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true, // For cookies and authentication headers
 };
