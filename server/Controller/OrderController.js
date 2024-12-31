@@ -164,7 +164,7 @@ const updateInventoryAfterOrder = async (order) => {
 
 export const updateOrderStatusController = async (req, res, next) => {
   try {
-    const { orderId, status } = req.body.detail;
+    const { orderId, status } = req.body;
 
     if (!["Pending", "Rejected", "Confirmed"].includes(status)) {
       return res.status(400).json({ message: "Invalid status value" });
