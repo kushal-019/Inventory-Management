@@ -52,7 +52,7 @@ const ShowInventory = ({ supplierId }) => {
 
       try {
         const response = await fetch(
-          `http://localhost:8080/api/v1/supplier/showinventory/${supplierId}`,
+          `https://inventory-management-mag3.onrender.com/api/v1/supplier/showinventory/${supplierId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -100,7 +100,7 @@ const ShowInventory = ({ supplierId }) => {
     const token = localStorage.getItem("authToken");
 
     try {
-      const response = await axios.patch(`http://localhost:8080/api/v1/supplier/updateinventory/${supplierId}`,
+      const response = await axios.patch(`https://inventory-management-mag3.onrender.com/api/v1/supplier/updateinventory/${supplierId}`,
         editedItems[productId],
           {
             headers: {

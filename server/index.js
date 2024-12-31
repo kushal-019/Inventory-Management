@@ -19,7 +19,7 @@ app.use(cookieParser());
 
 // CORS configuration for production
 const corsOptions = {
-  origin: process.env.CLIENT_URL || 'http://localhost:5173', //  frontend URL
+  origin: "https://inventory-management-ihxslzrpy-kushal-goels-projects.vercel.app", //  frontend URL
   methods: ['GET', 'POST', 'PATCH', 'DELETE'],
   credentials: true, // For cookies and authentication headers
 };
@@ -37,3 +37,5 @@ const port = process.env.PORT || 8080;
 app.listen(port, () => {
   console.log(`App running on port ${port}`);
 });
+
+export default app;

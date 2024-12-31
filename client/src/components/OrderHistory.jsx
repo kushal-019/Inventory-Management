@@ -14,7 +14,7 @@ const OrderHistory = ({ onSelectOrder }) => {
         const fetchOrders = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:8080/api/v1/orders/orderhistory",
+                    "https://inventory-management-mag3.onrender.com/api/v1/orders/orderhistory",
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,

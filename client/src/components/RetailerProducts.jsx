@@ -67,7 +67,7 @@ const RetailerProducts = ({ retailer, onBack }) => {
       };
 
       const response = await axios.post(
-        "http://localhost:8080/api/v1/orders/orderplaced",
+        "https://inventory-management-mag3.onrender.com/api/v1/orders/orderplaced",
         order,
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -96,7 +96,7 @@ const RetailerProducts = ({ retailer, onBack }) => {
       try {
         setIsLoading(true);
         const { data } = await axios.get(
-          `http://localhost:8080/api/v1/supplier/showinventory/${retailer._id}`,
+          `https://inventory-management-mag3.onrender.com/api/v1/supplier/showinventory/${retailer._id}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }

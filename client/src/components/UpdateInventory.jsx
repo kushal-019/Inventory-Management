@@ -71,7 +71,7 @@ function UpdateInventory(id) {
 
       // Send the form data to the backend
       const { data } = await axios.patch(
-        `http://localhost:8080/api/v1/supplier/updateinventory/${id.supplierId}`,
+        `https://inventory-management-mag3.onrender.com/api/v1/supplier/updateinventory/${id.supplierId}`,
         formData,
         {
           headers: {

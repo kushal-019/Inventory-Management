@@ -10,7 +10,7 @@ const OrderReceived = ({ onSelectOrder, supplierId }) => {
     const detail = { orderId: order._id, status: "Rejected" };
     try {
       await axios.patch(
-        "http://localhost:8080/api/v1/orders/updateOrderStatus",
+        "https://inventory-management-mag3.onrender.com/api/v1/orders/updateOrderStatus",
         {
           detail, // The data payload
         },
@@ -35,7 +35,7 @@ const OrderReceived = ({ onSelectOrder, supplierId }) => {
     const detail = { orderId: order._id, status: "Confirmed" };
     try {
       await axios.patch(
-        "http://localhost:8080/api/v1/orders/updateOrderStatus",
+        "https://inventory-management-mag3.onrender.com/api/v1/orders/updateOrderStatus",
         {
           detail, // The data payload
         },
@@ -66,7 +66,7 @@ const OrderReceived = ({ onSelectOrder, supplierId }) => {
         console.log(supplierId);
 
         const { data } = await axios.get(
-          `http://localhost:8080/api/v1/orders/orderrecieved`,
+          `https://inventory-management-mag3.onrender.com/api/v1/orders/orderrecieved`,
           {
             headers: {
               Authorization: `Bearer ${token}`, // Token in header

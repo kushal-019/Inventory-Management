@@ -16,7 +16,7 @@ const Signup = ({ onSwitch }) => {
   const handleSignup = async(e) => {
     e.preventDefault();
     try {
-        const response = await axios.post("http://localhost:8080/api/v1/auth/register", {name ,email,password,role:userType,gst,ferm});
+        const response = await axios.post("https://inventory-management-mag3.onrender.com/api/v1/auth/register", {name ,email,password,role:userType,gst,ferm});
         const { token } = response.data;
   
         localStorage.setItem("authToken", token);

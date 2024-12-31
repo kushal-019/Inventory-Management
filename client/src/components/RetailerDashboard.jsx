@@ -56,7 +56,7 @@ const RetailerDashboard = ({ data}) => {
       return;
     }
     try {
-        const response = await axios.get(`http://localhost:8080/api/v1/supplier/showinventory/${data.userId}`, {
+        const response = await axios.get(`https://inventory-management-mag3.onrender.com/api/v1/supplier/showinventory/${data.userId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

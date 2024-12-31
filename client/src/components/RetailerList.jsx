@@ -23,7 +23,7 @@ const RetailerList = ({ onSelectRetailer }) => {
         const role = jwtDecode(token).role;
         
         const response = await axios.get(
-          "http://localhost:8080/api/v1/supplier", 
+          "https://inventory-management-mag3.onrender.com/api/v1/supplier", 
           {
             headers: {
               Authorization: `Bearer ${token}`,

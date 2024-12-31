@@ -6,8 +6,10 @@ const connectDB = async () => {
       .connect(process.env.MONGOOSE_URL)
       .then(() => console.log("Connected!"));
   } catch (error) {
+    console.log(error);
     console.log("Error conneecting database");
   }
 };
 
 export default connectDB;
+

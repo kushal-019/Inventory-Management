@@ -16,7 +16,7 @@ const Login = ({ onSwitch }) => {
       console.log("Sending credentials:", credentials); // Debugging
   
       const response = await axios.post(
-        "http://localhost:8080/api/v1/auth/login",
+        "https://inventory-management-mag3.onrender.com/api/v1/auth/login",
         credentials
       );
 
